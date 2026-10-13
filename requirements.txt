@@ -1,0 +1,17 @@
+# Data analysis
+pandas
+numpy
+scipy
+
+# Interactive visualizations
+plotly
+
+# Statistical visualization
+seaborn
+
+# Jupyter Notebook
+jupyter
+ipykernel
+
+# Access to datos.gov.co API
+requests
