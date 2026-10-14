@@ -50,8 +50,10 @@ python3 -m venv .venv
 - El cuaderno se entrega **sin salidas**: cada figura se dibuja al ejecutar su celda y además se
   exporta a HTML y PNG.
 
-**Limitación conocida:** el cuaderno tiene la ruta absoluta del repositorio escrita a mano, así que
-hoy solo corre en esta máquina y en esta ruta.
+**Portabilidad:** el cuaderno no usa rutas absolutas. Localiza la raíz del repositorio subiendo desde
+el directorio actual hasta hallar la carpeta que contiene `proyecto_boxplots/` y `data/raw/`; también
+acepta la variable de entorno `PROYECTO_RAIZ`. Así corre igual en cualquier máquina, siempre que el
+repositorio mantenga esa estructura.
 
 ## Estructura del repositorio
 
