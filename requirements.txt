@@ -5,6 +5,10 @@ scipy
 
 # Interactive visualizations
 plotly
+kaleido
+
+# Presentation
+python-pptx
 
 # Statistical visualization
 seaborn
