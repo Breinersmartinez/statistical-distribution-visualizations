@@ -27,11 +27,11 @@ interpretación validada contra la tabla.
 
 | Figura | Técnica | Corte | Hallazgo |
 |--------|---------|-------|----------|
-| `fig1_halfeye_papa` | Half-Eye (densidad KDE + mediana + intervalos 66 % y 95 %) | Papa × Boyacá, Cundinamarca, Nariño, Antioquia, Santander | Cundinamarca y Boyacá rinden más en mediana que Antioquia y Nariño; dispersión interna > 10 t/ha en los cinco |
+| `fig1_halfeye_papa` | Half-Eye (densidad KDE + mediana + intervalos 66 % y 95 %) | Papa × Boyacá, Cundinamarca, Nariño, Antioquia, Santander | Medianas entre 14 y 20 t/ha; la amplitud del intervalo central del 95 % va de 22 a 37 t/ha |
 | `fig2_ridge_platano` | Ridge (densidad KDE por año, eje x común) | Plátano × 2019–2025 | La forma es estable; mediana cerca de 7 t/ha y cola alta persistente, con leve repunte en 2025 |
 | `fig3_sinaplot_cacao` | Sinaplot (jitter proporcional a la densidad) | Cacao × Huila, Tolima, Valle del Cauca, Cundinamarca, Cauca, Meta | Medianas casi iguales (0,5–0,6 t/ha) pero colas distintas: Valle del Cauca y Cauca llegan a 1,4–1,5 |
-| `fig4_boxenplot_top5` | Boxenplot (letter-value, cuantiles anidados) | Top 5 cultivos (maíz, yuca, frijol, tomate, plátano), rendimiento relativo | Mismo nivel (medianas = 1) pero colas distintas: tomate y maíz pesadas (p99 ≈ 4,4–4,8), yuca liviana (p99 ≈ 2,5) |
-| `fig5_composite_cafe` | Composite (caja + mediana + media + puntos) | Café × Antioquia, Santander, Cundinamarca, Boyacá, Nariño, Valle del Cauca | La media cae por debajo de la mediana en los 6 (cola baja), al revés que los cultivos anteriores |
+| `fig4_boxenplot_top5` | Boxenplot (letter-value, cuantiles anidados) | Cinco cultivos con más registros EVA positivos (maíz, yuca, frijol, tomate, plátano), rendimiento relativo | Mismo nivel (medianas = 1) pero colas distintas: tomate y maíz pesadas (p99 ≈ 4,4–4,8), yuca liviana (p99 ≈ 2,5) |
+| `fig5_composite_cafe` | Composite (caja + mediana + media + puntos) | Café × Antioquia, Santander, Cundinamarca, Boyacá, Nariño, Valle del Cauca | La media es levemente menor que la mediana en los seis departamentos; las medianas van de 0,95 a 1,21 t/ha |
 
 Salidas por figura: HTML interactivo en `proyecto_boxplots/figuras_interactivas/` y PNG en
 `proyecto_boxplots/figuras/`. El texto de cada interpretación vive en
@@ -42,6 +42,7 @@ Salidas por figura: HTML interactivo en `proyecto_boxplots/figuras_interactivas/
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
+.venv/bin/plotly_get_chrome -y  # una vez: necesario para exportar los PNG con Kaleido
 .venv/bin/jupyter lab proyecto_boxplots/boxplots_modernos_EVA.ipynb
 ```
 
@@ -69,11 +70,10 @@ requirements.txt         dependencias (pandas, numpy, scipy, plotly, kaleido, py
 ## Presentación
 
 `presentation/presentacion_boxplots_modernos.pptx` (14 diapositivas, orden contexto → hallazgo →
-implicación) reúne las cinco figuras y sus conclusiones.
+implicación → fuentes) reúne las cinco figuras y sus conclusiones.
 
 ## Método
 
-El trabajo sigue un bucle: especificar → planear → ejecutar → validar. Cada figura es una vuelta
-completa: se escribe el título conclusivo antes de dibujar, se arma la interpretación con f-strings
-desde las variables y se valida contra la tabla. Las reglas y el comando de ejecución están en
-`AGENTS.md`.
+Cada figura sigue el mismo ciclo reproducible: se escribe el título conclusivo antes de dibujar, se
+arma la interpretación con f-strings desde las variables y se valida contra la tabla. El comando de
+ejecución y las dependencias están documentados en este README.

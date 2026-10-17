@@ -29,7 +29,7 @@ departamento como total.
 | fig1 · Half-Eye | Papa | Boyacá, Cundinamarca, Nariño, Antioquia, Santander | `rendimiento > 0` (n = 4 622) |
 | fig2 · Ridge | Plátano | 2019–2025 | `rendimiento > 0`, por año |
 | fig3 · Sinaplot | Cacao | Huila, Tolima, Valle del Cauca, Cundinamarca, Cauca, Meta | `rendimiento > 0` |
-| fig4 · Boxenplot | Top 5 (maíz, yuca, frijol, tomate, plátano) | todos los municipios | `rendimiento > 0`, normalizado por mediana nacional |
+| fig4 · Boxenplot | Cinco cultivos con más registros EVA positivos (maíz, yuca, frijol, tomate, plátano) | todos los municipios | `rendimiento > 0`, normalizado por mediana nacional |
 | fig5 · Composite | Café | Antioquia, Santander, Cundinamarca, Boyacá, Nariño, Valle del Cauca | `rendimiento > 0` (n = 2 562) |
 
 ## Las cinco técnicas: qué estima cada una
@@ -43,8 +43,9 @@ departamento como total.
 - **Sinaplot** (fig3): cada observación se dibuja y se desplaza en horizontal en proporción a su
   **densidad local** (`dens = gaussian_kde(v)(v)`). Muestra todos los puntos, además de la forma.
 - **Boxenplot** (fig4): **cuantiles anidados** de `np.quantile(v,[qlo,qhi])` desde `(0.25,0.75)`
-  hasta `(0.0156,0.9844)`, cada banda proporcional al número de observaciones que resume. Como la
-  variable es un **cociente** (rendimiento ÷ mediana nacional del cultivo), se usa **escala
+  hasta `(0.0156,0.9844)`. Las bandas tienen grosor visual decreciente predefinido; la información
+  estadística está en sus extremos de cuantiles, no en ese grosor. Como la variable es un
+  **cociente** (rendimiento ÷ mediana nacional del cultivo), se usa **escala
   logarítmica** y una referencia en 1.
 - **Composite** (fig5): superpone la caja letter-value, la **mediana**, la **media** (rombo, distinta
   de la mediana) y una capa de puntos. Panel derecho: `go.Box` clásico del mismo corte.
