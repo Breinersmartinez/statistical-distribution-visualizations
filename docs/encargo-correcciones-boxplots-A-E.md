@@ -1,65 +1,90 @@
-# Encargo: Revisión y validación de defectos A–E y valores de referencia del bloque de boxplots modernos (EVA 2019–2025)
+# Encargo: Corrección de los defectos A–E del bloque de boxplots modernos (EVA 2019–2025)
 
 ## Encargo en una frase
-Revisar el repositorio para confirmar la existencia o ausencia de los defectos A–E identificables en el bloque de análisis `proyecto_boxplots/`, documentar los valores de referencia de las cinco figuras (Half-Eye, Ridge, Sinaplot, Boxenplot, Composite) tal como aparecen en el cuaderno y artefactos actuales, y dejar constancia escrita de los hallazgos con evidencia verificable, sin modificar código, figuras ni datos.
+Corregir el bloque `proyecto_boxplots/` de las cinco variaciones modernas del boxplot sobre EVA 2019–2025 resolviendo los defectos A–E definidos en el mensaje del usuario, editando el cuaderno, regenerando las 5 figuras HTML interactivas, los 5 PNG y `interpretaciones.json`, generando el informe HTML ejecutado y actualizando README, `requirements.txt`, la bitácora y los docs, sin tocar `presentation/` ni el CSV de `data/raw/`.
 
 ## Contexto
-El análisis de cinco variaciones modernas del boxplot sobre EVA 2019–2025 (UPRA · datos.gov.co `uejq-wxrr`) está versionado en este repositorio. El artefacto central es `proyecto_boxplots/boxplots_modernos_EVA.ipynb` con sus salidas (HTML/PNG) e `interpretaciones.json`. El método de trabajo exige seguir el bucle especificar → planear → ejecutar → validar y, cuando hay dudas sobre un resultado, “no parchear: se vuelve a especificar (encargo)” (AGENTS.md). Se requiere confirmar qué defectos (etiquetados conceptualmente A–E) existen en el estado actual del repositorio y establecer los valores de referencia que deben considerarse válidos para futuras validaciones.
-
-Quien recibe este encargo es el responsable de validación del proyecto (mismo equipo). La decisión que depende del resultado es si el estado actual de cuaderno/artefactos cumple las convenciones declaradas en AGENTS.md (cuaderno sin salidas, nombres de claves en `interpretaciones.json`, portabilidad de rutas, títulos escritos antes de dibujar, etc.) o si requiere una nueva vuelta de especificación.
+El repositorio `statistical-distribution-visualizations` contiene la actividad de "Técnicas de validación y simulación": cinco variaciones modernas del boxplot (Half-Eye, Ridge, Sinaplot, Boxenplot y Composite Stat-Boxplot) sobre el dataset EVA 2019–2025 (UPRA · datos.gov.co `uejq-wxrr`), en Python/Plotly. Una revisión independiente encontró defectos concretos (A–E) que esta ronda debe corregir. El destinatario es el propio Breiner y, en última instancia, la revisión del profesor: la decisión que depende del resultado es si la actividad queda entregable y verificable (figuras correctas, afirmaciones sostenibles, reproducibilidad sin Chrome, artefactos regenerados). Este tramo solo especifica; la corrección efectiva corresponde a los tramos de planear, ejecutar y validar.
 
 ## Lo que hay que responder o producir
-1. **Inventario de defectos A–E (con confirmación por artefacto).** Identificar, para cada uno de los defectos A–E que se puedan confirmar o descartar en el repo, si está presente, ausente o no aplicable. Para cada caso: (a) etiqueta (A–E), (b) nombre/descripción del defecto, (c) evidencia verificable (ruta absoluta o relativa + línea/celda/fragmento + SHA/estadísticas de archivo cuando aplique), (d) impacto (bloqueante/no bloqueante), (e) veredicto de confirmación (confirmado/descartado/no aplicable).
-2. **Valores de referencia por figura (5 figuras).** Listar para fig1–fig5 los valores de referencia que sirven como línea base inmutable para validación: corte (cultivo, alcance, filtros), n total y n por grupo, estadísticos usados en la interpretación (mediana/p25/p75/media/p10/p90/p95/p99/mín/max, anchura de intervalos cuando aplique), título conclusivo declarado en el cuaderno (tal como aparece), clave usada en `interpretaciones.json`, y nombres/rutas de HTML y PNG generados.
-3. **Estado de convenciones del repositorio (checklist verificable).** Verificación por condiciones: cuaderno tiene o no tiene salidas guardadas (0 outputs según convención), existencia y coincidencia de claves en `interpretaciones.json` vs convención `figN_<tema>`, portabilidad de rutas (uso de `hallar_raiz_proyecto()` y ausencia de rutas absolutas), títulos escritos antes de dibujar, `n` visible por grupo, orden por mediana/desempate por p99, escala declarada (lineal/logarítmica), filtros declarados por figura, crudo inmutable en `data/raw/` con bitácora, cumplimiento de AGENTS.md.
-4. **Hallazgos y evidencias consolidados.** Tabla única que agrupe defectos A–E, valores de referencia y estado de convenciones, con rutas exactas y cifras obtenidas de lectura real (no estimadas), en formato que permita reproducir la comprobación.
+1. **Cuaderno corregido** (`proyecto_boxplots/boxplots_modernos_EVA.ipynb`) con los defectos A–E resueltos uno a uno:
+   - A: eje Y de la Figura 1 numérico (`tickvals=0..4`, `ticktext` = los 5 departamentos, rango fijo), `go.Box` con `y0=i`/`width`, sin `type="category"`; las 5 etiquetas `n=` en filas distintas.
+   - B: Figura 5 reconstruida como boxplot estadístico integrado (violín + caja + puntos + media + `n` + Kruskal-Wallis H/gl/p + ε² + pares Mann-Whitney con Holm en tabla y hover, sin cajas letter-value), con la celda de concepto explicando qué agrega lo "estadístico".
+   - C: cada afirmación insostenible de las Fig 1–5 corregida (texto y/o título), con cada cifra salida de una variable vía f-strings.
+   - D: títulos de Fig 1 y 4 sin cortar (líneas ≤ ~85 caracteres, comprobado por código); etiquetas del eje X de Fig 3 sin solaparse.
+   - E: exportación a PNG envuelta en try/except con aviso y lista final de PNG faltantes; requisitos fijados; informe HTML ejecutado; figuras y `interpretaciones.json` regenerados; README/bitácora/data-README/docs actualizados.
+   El cuaderno se entrega **sin salidas** (0 `outputs`, 0 `execution_count`).
+2. **Artefactos regenerados**: 5 HTML en `proyecto_boxplots/figuras_interactivas/`, 5 PNG en `proyecto_boxplots/figuras/` e `interpretaciones.json`, todos producidos desde el cuaderno corregido con Restart & Run All sin errores. Nombres de archivo y claves `fig1_halfeye`, `fig2_ridge`, `fig3_sinaplot`, `fig4_boxenplot`, `fig5_composite` **sin cambios**.
+3. **Informe ejecutable** `proyecto_boxplots/boxplots_modernos_EVA.html` (nbconvert `--execute`) donde se ven las 5 figuras sin correr nada.
+4. **Documentación actualizada**: `README.md` (tabla de hallazgos con los títulos corregidos y pasos de ejecución), `requirements.txt` (versiones mínimas), `data/raw/bitacora_descarga.json` (rutas relativas), `data/README.md` (hoy vacío) y `docs/dataset-sources.md` (explicación verificada de la discrepancia de `sha256`).
+5. **Reporte de reproducción de los valores de referencia del mensaje**: tabla con, por figura, el valor declarado por el usuario y el valor que produce el cuaderno; si alguno no coincide, se **reporta la diferencia** (no se ajusta nada). Valores a reproducir: Fig 1 (medianas Antioquia 14, Nariño 15, Boyacá 16, Santander 18, Cundinamarca 20; N = 4.622; ancho del intervalo 95 % 22–37); Fig 2 (máximo 2021 = 25,0; media 2021 ≈ 7,55 y 2025 ≈ 8,46; medianas 7,0–7,57); Fig 3 (N por depto 187–247; máximos Valle 1,5 · Cauca 1,4 · Huila 0,88; ≈ 85 % múltiplos de 0,05; ≈ 43,8 % en 0,5 o 0,6); Fig 4 (p99 relativo tomate 4,82 · maíz 4,44 · frijol 3,23 · plátano 3,14 · yuca 2,50; máximos relativos maíz 15,6 · frijol 14,6 · yuca 9,0 · tomate 8,4 · plátano 4,3); Fig 5 (N = 2.562; medianas 0,95 Boyacá – 1,21 Antioquia; Kruskal-Wallis H ≈ 182,5, p ≈ 1,6e-37, ε² ≈ 0,069).
+6. **Títulos nuevos escritos antes de redibujar** (en el tramo de plan, previo a cualquier ejecución) y luego **validados contra la tabla** de valores de referencia; ninguno retocado a posteriori para que "cuadre".
+7. **Evidencia de las comprobaciones programáticas**: JSON/dict de la Figura 1 (eje Y no `category`, exactamente 5 `ticktext`, sin ticks decimales, 5 `Box` con `y0` distintos) y de la Figura 5 (componentes presentes, ausencia de letter-value, estadísticos y pares).
 
 ## Insumos que hace falta tener
 | Insumo | Para qué se usa | Si no existe |
 |---|---|---|
-| `proyecto_boxplots/boxplots_modernos_EVA.ipynb` | Leer celdas (markdown/código), confirmar títulos, cortes, estadísticos, presencia de salidas, uso de `hallar_raiz_proyecto()`. | Marcar como pregunta pendiente: ¿se debe asumir cuaderno presente o especificar insumo faltante? No crear ni regenerar. |
-| `proyecto_boxplots/interpretaciones.json` | Extraer claves y textos de interpretación (valores de referencia textuales). | Registrar ausencia y su impacto; no inventar contenido. |
-| `proyecto_boxplots/figuras_interactivas/*.html` (5 archivos) | Confirmar nombres, existencia, tamaño y metadatos (para evidenciar estado actual). | Registrar qué archivos faltan (con ruta exacta). |
-| `proyecto_boxplots/figuras/*.png` (5 archivos) | Confirmar nombres y existencia. | Registrar ausencia con ruta exacta. |
-| `data/raw/Evaluaciones_Agropecuarias_Municipales_EVA_2019_2025_agricola.csv` y `data/raw/bitacora_descarga.json` | Confirmar crudo inmutable, conteos, SHA/fecha (referencia). | Registrar si falta (no descargar). |
-| `docs/statistical-methodology.md`, `docs/dataset-sources.md`, `README.md`, `AGENTS.md` | Extraer convenciones, cortes declarados, unidades, reglas (valores de referencia metodológicos). | Usar lo presente; no asumir versiones distintas. |
-| `.opencode/skills/*` (plantillas/skills) | Usar como referencia del formato de encargo (ya presente). | No modificar skills. |
+| `proyecto_boxplots/boxplots_modernos_EVA.ipynb` | Editar A–E y regenerar todos los artefactos. | Bloqueante: sin cuaderno no hay corrección; declararlo. |
+| `proyecto_boxplots/interpretaciones.json` | Regenerar los textos con las claves fijas `fig1_halfeye`…`fig5_composite`. | Se crea desde el cuaderno; no inventar textos a mano. |
+| `proyecto_boxplots/figuras/*.png` (5) y `figuras_interactivas/*.html` (5) | Sobrescribir con las versiones corregidas. | Se regeneran desde el cuaderno. |
+| `data/raw/Evaluaciones_Agropecuarias_Municipales_EVA_2019_2025_agricola.csv` | Recalcular estadísticas y verificar el `sha256`. | El cuaderno lo descarga de la API (requiere internet); **no** editar el crudo. |
+| `data/raw/bitacora_descarga.json` | Relativizar rutas y conservar campos de verificación. | Si falta, dejarlo anotado; no fabricar campos. |
+| `README.md`, `requirements.txt`, `data/README.md`, `docs/dataset-sources.md`, `docs/statistical-methodology.md` | Actualizar según E. | Usar lo presente; no asumir versiones distintas. |
+| Valores de referencia (mensaje del usuario) | Línea base de validación de A, B y C. | No deducibles del repo; ya vienen en el mensaje. |
+| Entorno: `scipy`, `kaleido`, `nbconvert`, Chrome / `plotly_get_chrome` | B: Kruskal-Wallis/Mann-Whitney; D/E: PNG y HTML ejecutado. | Sin Chrome, PNG faltantes con aviso (no debe romper); declarar. |
+| `AGENTS.md` (existe en local, en `.gitignore`) | Convenciones; decidir si se versiona o se quita su referencia del README. | No debe afectar la corrección; ver pregunta pendiente 1. |
 
 ## Criterio de aceptación
-- **Forma esperada del resultado.** Un único documento de encargo (este) debidamente completado con todas las secciones, con tablas verificables, rutas exactas, cifras con precisión suficiente (decimales tal como aparecen) y evidencia por hallazgo. Debe incluir la lista completa de defectos A–E con veredicto por ítem y los 4 puntos de “Lo que hay que responder o producir” desarrollados.
-- **Limitaciones razonables.** La lectura se hace sobre el estado versionado+working tree tal como está (sin ejecutar cuaderno, sin regenerar figuras, sin editar archivos). Si alguna evidencia no está accesible por lectura directa, se declara explícitamente (no se infiere). No se asumen valores que no aparezcan en los insumos.
-- **Cómo se sabrá que responde.** Al revisar el encargo resultante: (a) cada defecto A–E aparece con ruta+fragmento/evidencia, (b) cada figura tiene sus valores de referencia listados (corte, n, estadísticos, título, clave, archivos), (c) el checklist de convenciones está respondido con evidencia, (d) no hay cifras inventadas (todas citan origen), (e) no hay propuestas de solución/código/plan (solo especificación), (f) se incluye sección “Preguntas pendientes” con elementos no deducibles, (g) termina exactamente con `"Encargo listo. ¿Lo apruebas?"`.
+- **Forma esperada del resultado.** El cuaderno corregido y sin salidas; 5 HTML + 5 PNG + `interpretaciones.json` regenerados; el informe `proyecto_boxplots/boxplots_modernos_EVA.html`; README, `requirements.txt`, bitácora, `data/README.md` y docs actualizados; y un reporte de reproducción de valores de referencia por figura (valor declarado vs valor del cuaderno, con la diferencia si no coincide).
+- **Condiciones verificables (textuales del mensaje):**
+  1. Fig 1 pasa la comprobación programática de A, en el HTML y en el PNG.
+  2. Fig 5 incluye violín + caja + puntos + media + n + Kruskal-Wallis + epsilon cuadrado + pares con Holm, y ya no usa cajas letter-value.
+  3. Cada afirmación de C está corregida y cada cifra del texto sale de una variable (ninguna escrita a mano).
+  4. Los 5 títulos se escriben antes de redibujar y se validan contra la tabla; ninguno retocado a posteriori.
+  5. Títulos de Fig 1 y 4 sin cortar; etiquetas de Fig 3 sin solaparse (comprobado por código).
+  6. El cuaderno corre de arriba a abajo sin errores, con y sin Chrome; el HTML ejecutado existe y muestra las 5 figuras.
+  7. `data/raw/*.csv` con el mismo `sha256` que en la bitácora; `presentation/` sin cambios (`git diff` vacío en esa carpeta).
+  8. Validación por figura con las cuatro preguntas del analista: ¿el número tiene sentido?, ¿la forma cuadra (misma escala, n visible, orden por mediana, densidad dentro del rango de los datos)?, ¿responde lo que pregunté?, ¿cambió algo frente al boxplot del mismo corte?
+- **Sección E completa (textual del mensaje):**
+  - `write_image` (Kaleido ≥ 1 requiere Chrome) no debe hacer fallar el cuaderno: envolver cada exportación PNG en try/except con aviso claro y una lista final de PNG que faltaron; documentar `plotly_get_chrome` en el README; el cuaderno completo debe correr sin errores incluso sin Chrome (con aviso).
+  - `requirements.txt`: fijar versiones mínimas de lo ya listado (pandas, numpy, scipy, plotly, kaleido, requests, jupyter, ipykernel y las demás actuales); no eliminar entradas; añadir solo lo que se use (p. ej. nbconvert).
+  - Generar y entregar `proyecto_boxplots/boxplots_modernos_EVA.html` (nbconvert `--execute`) donde se vean las 5 figuras sin correr nada; preferir figuras interactivas que abran sin internet; si el archivo supera ~40 MB, usar PNG incrustados y enlaces relativos a `figuras_interactivas/`, declarándolo en el README; el `.ipynb` sigue sin salidas.
+  - Regenerar las 5 figuras HTML interactivas y los 5 PNG e `interpretaciones.json` desde el cuaderno corregido, con Restart & Run All sin errores.
+  - `README.md`: actualizar la tabla de hallazgos con los títulos corregidos y los pasos de ejecución; eliminar la referencia a `AGENTS.md`; no modificar la sección sobre la presentación.
+  - `data/raw/bitacora_descarga.json`: reemplazar las rutas absolutas locales (`/home/...`) por rutas relativas al repo; conservar todos los campos de verificación; comparar el CSV previo (mismo número de filas, `sha256` distinto) con el descargado y documentar en `docs/dataset-sources.md` la explicación verificada (p. ej. orden de columnas, codificación o formato numérico); si no se puede determinar, decirlo.
+  - `data/README.md` está vacío: escribir una descripción breve (origen, enlace directo, cómo se descarga, qué es inmutable).
+- **Límites razonables.** Se mantienen los cortes (papa × 5 deptos, plátano × años, cacao × 6 deptos, top 5 cultivos, café × 6 deptos) y los nombres de archivo/claves. Se admite cambiar un título si una validación lo obliga, nunca un corte. Las cifras de referencia pueden diferir del cuaderno (se reporta, no se ajusta).
+- **Cómo se sabrá que responde.** (a) Fig 1 supera la comprobación programática en HTML y PNG; (b) Fig 5 tiene todos los componentes de B y cero letter-value; (c) ninguna cifra del texto está escrita a mano; (d) los 5 títulos están redactados antes de redibujar y coinciden con la tabla; (e) el cuaderno corre con y sin Chrome y el HTML ejecutado muestra 5 figuras; (f) `sha256` del CSV igual a la bitácora y `git diff -- presentation/` vacío; (g) existe el reporte de reproducción de valores de referencia.
 
 ## Lo que queda fuera
-- Planificación de pasos, ejecución, regeneración de figuras o edición del cuaderno/artefactos (esto corresponde a otros tramos del bucle).
-- Inferir o adivinar los defectos A–E si no existen etiquetas explícitas en el repo (se deben confirmar o descartar con evidencia).
-- Descargar/re-descargar datos de la API o modificar `data/raw/`.
-- Proponer correcciones, parches o cambios de nombres/claves (solo especificar lo observado).
-- Completar valores con simulaciones o redondeos no presentes en los archivos.
-- Auditar dependencias/entorno más allá de lo necesario para leer evidencias.
+- Auditar el repo o confirmar/descartar defectos: los A–E ya están dados en el mensaje y esta ronda los corrige.
+- Cambiar de dataset, de cortes o de nombres de archivo/claves (`fig1_halfeye`…`fig5_composite`).
+- Tocar `presentation/` o modificar el CSV de `data/raw/` (su `sha256` debe quedar igual).
+- Datos simulados o cifras de interpretación escritas a mano.
+- Instalar dependencias sin declararlas en `requirements.txt`.
+- Planificar pasos, ejecutar y validar: corresponde a los otros tramos del bucle.
 
 ## Riesgos del resultado
-- **Lectura equivocada de convenciones:** asumir que las salidas presentes en el cuaderno cumplen “cuaderno sin salidas” puede llevar a validar incorrectamente (riesgo para quien siga el ciclo). 
-- **Confusión de claves en interpretaciones.json:** si las claves difieren de la convención `figN_<tema>`, futuras validaciones pueden apuntar a nombres distintos (riesgo de trazabilidad entre figura y texto). 
-- **Falsos positivos de “defecto”:** etiquetar como defecto algo que es el estado intencional actual sin evidencia verificable puede distorsionar la especificación. 
-- **Uso de cifras no citadas:** armar valores de referencia sin citar celda/tabla origen dificulta su comprobación posterior.
+- **Valores de referencia no reproducidos:** si el cuaderno no da las cifras del mensaje, tomarlas como ciertas ocultaría un error de cálculo; se debe reportar la diferencia.
+- **Título ajustado a posteriori:** retocar un título para que "cuadre" con la tabla rompe la regla del bucle; los títulos se escriben antes de dibujar.
+- **Chrome ausente en el entorno de entrega:** sin el try/except, el cuaderno se rompe en la primera figura; con él, faltarían PNG y hay que declararlos.
+- **Informe HTML sobredimensionado:** puede superar ~40 MB y volverse inmanejable; prever PNG incrustados + enlaces relativos.
+- **Deriva de `presentation/` o del crudo:** cualquier edición en esas rutas invalida la entrega (condición 7).
 
 ## Preguntas pendientes
-1. **Defectos A–E (etiquetado).** En el repositorio no se encuentra una lista explícita con etiquetas A–E (ni en README, docs, AGENTS.md, cuaderno o .ipynb). ¿Debe tomarse como “defectos A–E” a un conjunto candidato derivado de las convenciones de AGENTS.md (p.ej. A: salidas en cuaderno ≠ 0 outputs, B: claves de interpretaciones.json distintas a `figN_<tema>`, C: nombres de archivos/tema vs clave, D: ausencia de `n` visible declarado donde corresponda, E: rutas absolutas vs portables)? ¿O existe una definición/plantilla externa que lista A–E?
-2. **Valores de referencia a reportar (alcance).** ¿Los “valores de referencia” deben limitarse a lo declarado en el cuaderno (tablas de corte + títulos + estadísticos calculados) o también incluir lo que aparece en `interpretaciones.json` (texto ya redactado)? En caso afirmativo, ¿incluir ambos con su origen?
-3. **Precisión de cifras.** ¿Qué precisión se exige para reportar estadísticos (1 decimal vs 2 decimales vs tal como aparecen en celdas)? ¿Debe respetarse exactamente el formato mostrado en el cuaderno (p.ej. 7.57 vs 7.6)?
-4. **Evidencia mínima por defecto.** Para cada ítem A–E confirmado, ¿es suficiente con ruta + celda/fragmento, o debe incluirse también número de línea dentro del `.ipynb` (JSON) y/o conteos (bytes) para que la evidencia sea inmutable?
-5. **Criterio de “cuaderno sin salidas”.** El cuaderno muestra `execution_count` distintos de null y bloques `outputs` en varias celdas (según git diff). ¿Ese estado constituye el defecto a confirmar (A) bajo la convención “cuaderno sin salidas: 0 outputs”, aunque los HTML/PNG existan y estén actualizados?
-6. **Coherencia de nombres de clave vs convención.** AGENTS.md indica “claves de `interpretaciones.json`: `figN_<tema>`”. Las claves actuales son `fig1_halfeye`, `fig2_ridge`, `fig3_sinaplot`, `fig4_boxenplot`, `fig5_composite`. ¿Se considera esto conforme o constituye defecto (B)? ¿La convención exige el sufijo del tema completo (p.ej. `fig1_halfeye_papa`) o el patrón `figN_<tema>` genérico?
-7. **Valores de referencia adicionales.** ¿Incluir también `n` por grupo, p99 (para desempate) y ancho de intervalos IC66/IC95 (Half-Eye) como parte obligatoria de valores de referencia para todas las figuras donde aplique?
+1. **`AGENTS.md` (versionado vs referencia).** El archivo existe en local pero está en `.gitignore` y no está versionado; el README lo referencia como fuente de reglas y comando. ¿Se **versiona** `AGENTS.md` (quitándolo de `.gitignore`) o se **elimina la referencia** a `AGENTS.md` del README (como pide E)?
+2. **Criterio de "diferencias relevantes" en la Figura 5.** B pide mostrar en la figura "solo las diferencias relevantes" de los pares Mann-Whitney, sin definirlas. ¿Qué cuenta como relevante para dibujar (p. ej. solo pares con p de Holm < 0,05, un umbral de tamaño de efecto, o todas las de la tabla resumidas)? El resto de pares iría a la tabla del cuaderno y al hover.
 
 ## Decisiones tomadas
 | Duda que apareció | Qué se decidió | Por qué |
 |---|---|---|
-| Ausencia de etiquetas A–E explícitas en el repo. | No se inventaron defectos. Se deja planteado en “Preguntas pendientes” (1) cómo debe interpretarse el etiquetado A–E, y se procede a especificar la estructura para registrarlos con evidencia verificable una vez aclarado. | Cumple Regla 3 y 4 del skill (no inventar límites/insumos; dejar ambigüedad en preguntas pendientes). |
-| Cuaderno presenta salidas (estado actual con outputs) vs convención “sin salidas”. | Se identifica esta discrepancia como candidata a revisar (pregunta 5), pero no se califica como defecto confirmado sin aclaración. Se exige evidencia explícita por ítem. | Respeta “no parchear un resultado que falla: se vuelve a especificar (encargo)”. |
-| Divergencia entre claves de interpretaciones.json y convención AGENTS.md. | Se señala la posible incoherencia (pregunta 6) y se solicita aclaración antes de calificarla como defecto. | Evita suponer qué convención prevalece (texto AGENTS.md vs estado actual). |
-| Alcance de “valores de referencia”. | Se estructura en dos vertientes (estadísticos del corte + texto/identificadores de artefactos) y se consulta en pregunta 2. | Garantiza trazabilidad entre cifras, títulos y artefactos generados. |
-| Precisión de cifras. | Se deja a clarificar en pregunta 3 para evitar falsear formatos. | Mantiene fidelidad al origen (no redondeo inventado). |
+| De dónde salen los defectos A–E. | Tomarlos **literalmente** de la sección "DEFECTOS A CORREGIR" del mensaje del usuario (A: Fig 1 rota; B: Fig 5 sin componente estadístico; C: afirmaciones insostenibles; D: legibilidad; E: reproducibilidad y entregables). No inferirlos de AGENTS.md. | El usuario corrigió que los defectos están en su mensaje, no en el repo. |
+| Objetivo del encargo. | **Corregir** (editar cuaderno, regenerar figuras y JSON, generar informe, actualizar docs), no auditar. | Es la ronda de corrección; la auditoría anterior quedó descartada. |
+| Qué cifras son línea base. | Los **valores de referencia del mensaje**, calculados de forma independiente; el cuaderno actual **no** lo es. | El usuario lo indicó explícitamente; si el cuaderno no los reproduce, se reporta. |
+| Alcance de edición. | `proyecto_boxplots/`, `README.md`, `requirements.txt`, `data/README.md`, `data/raw/bitacora_descarga.json`, `docs/`. Prohibido `presentation/` y el CSV crudo. | Límite duro declarado por el usuario (condición 7). |
+| Claves de `interpretaciones.json`. | Se conservan `fig1_halfeye`…`fig5_composite`. | Otros archivos (presentación y consumidores) las leen. |
+| Salidas del cuaderno. | Se entrega **sin salidas** (0 `outputs`). El cuaderno ya está limpio hoy y debe seguir así. | Convención del repo y requisito de E. |
+| Dónde se escriben los títulos nuevos. | Antes de redibujar (tramo de plan inmediato) y se validan contra la tabla; no se retocan después. | Regla del bucle (escribir el título antes de dibujar) repetida en C. |
+| Comprobaciones "no dependan de verlo". | Se exige evidencia programática sobre el JSON/dict de las figuras (A y B). | El mensaje pide comprobación por código, no visual. |
 
 Encargo listo. ¿Lo apruebas?
